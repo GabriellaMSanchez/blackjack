@@ -1,5 +1,6 @@
 from entities import Card, Deck, Participant
 
+
 def run():
     # first get user settings at the beginning of the game
     bankroll = get_user_bankroll()
@@ -10,8 +11,10 @@ def run():
         play_round(player, dealer, deck)
         playing = ask_player_to_play_again()
 
+
 def ask_player_to_play_again():
     return input(f"Would you like to play again? [Y/N] ").lower() == 'y'
+
 
 def play_round(player, dealer, deck):
     # player places their bet
@@ -38,12 +41,14 @@ def play_round(player, dealer, deck):
     # player and deal should return their hands to the original deck
     cleanup(player, dealer, deck)
 
+
 def setup(bankroll):
     player = Participant(bankroll, "Player")
     dealer = Participant(bankroll, "Dealer")
     deck = Deck()
     deck.shuffle()
     return (player, dealer, deck)
+
 
 def get_user_bankroll():
     # choose bankroll
@@ -54,6 +59,7 @@ def get_user_bankroll():
         bankroll = input("What is the value of your bankroll? ")
     return int(bankroll)
 
+
 def get_user_bet():
     # choose bet
     bet = input(f"What would you like to bet?: ")
@@ -62,9 +68,11 @@ def get_user_bet():
         bet = input(f"What would you like to bet?: ")
     return int(bet)
 
+
 def place_bet(player, dealer, bet):
     player.place_bet(bet)
     dealer.place_bet(bet)
+
 
 def deal(player, dealer, deck):
     add_card(player, deck)
@@ -72,10 +80,12 @@ def deal(player, dealer, deck):
     add_card(player, deck)
     add_card(dealer, deck)
 
+
 def ask_user_to_hit(player):
     # hit_me will result in a bool
     return input(f"Player your hands' value is: {player.hand_value()}.\
         \nWould you like to hit? [Y/N] ").lower().startswith('y')
+
 
 def hit_or_stay(player, deck):
     is_busted = False
@@ -88,10 +98,12 @@ def hit_or_stay(player, deck):
             break
         hit_me = ask_user_to_hit(player)
 
+
 def player_is_busted(player) -> bool:
     if player.hand_value() > 21:
         return True
     return False
+
 
 def dealers_turn(player, dealer, deck):
     is_busted = False
@@ -100,8 +112,10 @@ def dealers_turn(player, dealer, deck):
         add_card(dealer, deck)
         is_busted = player_is_busted(dealer)
 
+
 def add_card(player, deck):
     player.add_card(deck.draw())
+
 
 def dealer_did_win(player, dealer, bet):
     if player_is_busted(player):
@@ -114,8 +128,10 @@ def dealer_did_win(player, dealer, bet):
     else:
         return False
 
+
 def add_winnings(player, bet):
     player.add_winnings(bet * 2)
+
 
 def cleanup(player, dealer, deck):
     for _ in range(len(player.hand)):
@@ -123,6 +139,7 @@ def cleanup(player, dealer, deck):
     for _ in range(len(dealer.hand)):
         deck.add_card(dealer.hand.pop())
     deck.shuffle()
+
 
 if __name__ == '__main__':
     run()
